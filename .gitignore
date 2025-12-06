@@ -1,0 +1,18 @@
+# Ignore OS files
+.DS_Store
+**/.DS_Store
+Thumbs.db
+
+# Ignore neovim generated files
+nvim/.config/nvim/plugin/
+nvim/.config/nvim/.luarc.json
+nvim/.config/nvim/lazy-lock.json
+nvim/.config/nvim/spell/
+nvim/.config/nvim/undo/
+nvim/.config/nvim/swap/
+nvim/.config/nvim/backup/
+nvim/.config/nvim/sessions/
+nvim/.config/nvim/shada/
+
+# Ignore ghostty generated files
+nvim/.config/ghostty/crash/

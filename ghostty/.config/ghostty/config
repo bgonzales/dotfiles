@@ -1,0 +1,24 @@
+# \x13 = ctrl+s in hexadecimal (https://www.eso.org/~ndelmott/ascii.html)
+keybind = cmd+s=text:\x0E
+keybind = cmd+shift+o=text:,o
+keybind = cmd+'=text:gcc 
+keybind = cmd+shift+y=text:,xl
+keybind = cmd+r=text:,xr
+
+# keybind = performable:cmd+j=increase_font_size:1
+# keybind = performable:cmd+plus=increase_font_size:1
+
+# Fix for version 1.2.0
+keybind = cmd+bracket_right=increase_font_size:1
+keybind = cmd+equal=unbind
+
+# Fix for version 1.2.0
+theme = dark:Catppuccin Mocha,light:Catppuccin Latte
+#theme = dark:catppuccin-mocha,light:catppuccin-latte
+
+cursor-style = block
+# cursor-style-blink = false
+shell-integration-features = no-cursor
+
+font-style-italic = false
+keybind = shift+enter=text:\x1b\r
