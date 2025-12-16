@@ -4,8 +4,7 @@
 
 - Requirements for Telescope and language servers: `brew install fzf ripgrep fd node`
 - Treesitter-cli: `npm install -g tree-sitter-cli`
-- Requirements for Xcode plugin: `brew install xcode-build-server xcbeautify` and `gem install xcodeproj --user-install` (make sure to include .gems in PATH)
-  - Note: swiftformat and swiftlint are auto-installed via Mason
+- Requirements for Xcode plugin: `brew install xcode-build-server xcbeautify swiftformat swiftlint` and `gem install xcodeproj --user-install` (make sure to include .gems in PATH)
 
 `xcode-build-server` is optional
 
@@ -31,20 +30,20 @@ Complete development environment with LSP, formatting, linting, and completion f
 | Language | LSP | Completion | Formatter | Linter |
 |----------|-----|------------|-----------|--------|
 | **Swift** | ✅ sourcekit-lsp | ✅ blink.cmp | ✅ swiftformat | ✅ swiftlint |
-| **C** | ✅ clangd + sourcekit | ✅ blink.cmp | ✅ clang-format | ✅ clang-tidy + cppcheck |
-| **C++** | ✅ clangd + sourcekit | ✅ blink.cmp | ✅ clang-format | ✅ clang-tidy + cppcheck |
+| **C** | ✅ clangd + sourcekit | ✅ blink.cmp | ✅ clang-format | ⚠️ via LSP (clangd) |
+| **C++** | ✅ clangd + sourcekit | ✅ blink.cmp | ✅ clang-format | ⚠️ via LSP (clangd) |
 | **Objective-C** | ✅ sourcekit-lsp | ✅ blink.cmp | ✅ clang-format | ⚠️ via LSP |
 | **Objective-C++** | ✅ sourcekit-lsp | ✅ blink.cmp | ✅ clang-format | ⚠️ via LSP |
-| **Python** | ✅ pyright + ruff | ✅ blink.cmp | ✅ ruff_format | ✅ ruff |
-| **Go** | ✅ gopls | ✅ blink.cmp | ✅ gofmt + goimports | ✅ golangci-lint |
+| **Python** | ✅ pyright + ruff | ✅ blink.cmp | ✅ ruff_format | ⚠️ via LSP (ruff) |
+| **Go** | ❌ (requires Go) | ❌ | ❌ | ❌ |
 | **Rust** | ✅ rust_analyzer | ✅ blink.cmp | ✅ rustfmt | ✅ clippy (via LSP) |
-| **Lua** | ✅ lua_ls | ✅ blink.cmp | ✅ stylua | ✅ selene |
-| **LaTeX** | ✅ texlab | ✅ blink.cmp | ✅ latexindent | ✅ chktex |
-| **JavaScript** | ✅ ts_ls + eslint | ✅ blink.cmp | ✅ prettier | ✅ eslint_d |
-| **TypeScript** | ✅ ts_ls + eslint | ✅ blink.cmp | ✅ prettier | ✅ eslint_d |
-| **JSX** | ✅ ts_ls + eslint | ✅ blink.cmp | ✅ prettier | ✅ eslint_d |
-| **TSX** | ✅ ts_ls + eslint | ✅ blink.cmp | ✅ prettier | ✅ eslint_d |
-| **Svelte** | ✅ svelte | ✅ blink.cmp | ✅ prettier | ✅ eslint_d |
+| **Lua** | ✅ lua_ls | ✅ blink.cmp | ✅ stylua | ⚠️ via LSP (lua_ls) |
+| **LaTeX** | ✅ texlab | ✅ blink.cmp | ✅ latexindent | ⚠️ via LSP (texlab) |
+| **JavaScript** | ✅ ts_ls + eslint | ✅ blink.cmp | ✅ prettier | ⚠️ via LSP (eslint) |
+| **TypeScript** | ✅ ts_ls + eslint | ✅ blink.cmp | ✅ prettier | ⚠️ via LSP (eslint) |
+| **JSX** | ✅ ts_ls + eslint | ✅ blink.cmp | ✅ prettier | ⚠️ via LSP (eslint) |
+| **TSX** | ✅ ts_ls + eslint | ✅ blink.cmp | ✅ prettier | ⚠️ via LSP (eslint) |
+| **Svelte** | ✅ svelte + eslint | ✅ blink.cmp | ✅ prettier | ⚠️ via LSP (eslint) |
 | **Markdown** | ✅ marksman | ✅ blink.cmp | ✅ prettier | ✅ markdownlint |
 | **CSS** | ✅ cssls | ✅ blink.cmp | ✅ prettier | ✅ stylelint |
 | **SCSS** | ⚠️ via cssls | ✅ blink.cmp | ✅ prettier | ✅ stylelint |
@@ -60,10 +59,12 @@ Complete development environment with LSP, formatting, linting, and completion f
 **Legend:** ✅ Full support | ⚠️ Partial/LSP fallback | ❌ Not configured
 
 ### Summary
-- **16 languages** with full stack (LSP + Format + Lint + Completion)
-- **33 tools** auto-installed via Mason
+- **25+ languages** supported with LSP, formatting, and/or linting
+- **6 languages** with dedicated linters (Swift, Rust, Markdown, CSS/SCSS, Dockerfile, Shell, YAML)
+- **9 languages** use LSP diagnostics only (Lua, Python, JS/TS, C/C++, LaTeX, etc.)
+- **24 tools** auto-installed via Mason (swiftformat + swiftlint via Homebrew)
 - **All formatters** use conform.nvim with LSP fallback
-- **All linters** use nvim-lint with auto-linting on save
+- **Dedicated linters** use nvim-lint, **LSP-based** use built-in diagnostics
 
 ### Key Keybindings
 - `,ff` - Format current file (all languages)

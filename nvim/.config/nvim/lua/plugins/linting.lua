@@ -7,19 +7,20 @@ return {
 
 			lint.linters_by_ft = {
 				swift = { "swiftlint" },
-				lua = { "selene" },
+				-- python: Use ruff LSP for diagnostics (matches LazyVim approach)
+				-- javascript/typescript/svelte: Use eslint LSP for diagnostics (matches LazyVim approach)
+				-- lua: Use lua_ls (LSP) diagnostics instead of selene (matches LazyVim approach)
 				markdown = { "markdownlint" },
 				sh = { "shellcheck" },
 				bash = { "shellcheck" },
 				zsh = { "shellcheck" },
 				dockerfile = { "hadolint" },
-				go = { "golangci-lint" },
+				-- go = { "golangci-lint" }, -- Requires Go installation
 				css = { "stylelint" },
 				scss = { "stylelint" },
 				yaml = { "yamllint" },
-				c = { "clangtidy", "cppcheck" },
-				cpp = { "clangtidy", "cppcheck" },
-				tex = { "chktex" },
+				-- C/C++: clang-tidy integrated into clangd LSP (no separate linter needed)
+				-- LaTeX: chktex not in Mason, texlab LSP provides diagnostics
 			}
 
 			-- Auto-lint on save and buffer enter

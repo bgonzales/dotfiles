@@ -4,7 +4,7 @@ return {
 		dependencies = {
 			"wojciech-kulik/xcodebuild.nvim",
 			"rcarriga/nvim-dap-ui",
-			"nvim-neotest/nvim-nio", -- Required by nvim-dap-ui
+			"nvim-neotest/nvim-nio",  -- Required by nvim-dap-ui
 			"theHamsta/nvim-dap-virtual-text", -- Optional: Show variable values inline
 		},
 		config = function()
@@ -14,34 +14,34 @@ return {
 			-- Setup xcodebuild integration (handles codelldb automatically for Xcode 16+)
 			xcodebuild.setup()
 
-			-- Customize breakpoint signs to look like Xcode
+			-- Customize breakpoint signs (simple Unicode symbols for reliability)
 			vim.fn.sign_define("DapBreakpoint", {
 				text = "●",
-				texthl = "DapBreakpoint",
+				texthl = "DiagnosticInfo",
 				linehl = "",
 				numhl = "",
 			})
 			vim.fn.sign_define("DapBreakpointCondition", {
 				text = "◆",
-				texthl = "DapBreakpointCondition",
+				texthl = "DiagnosticInfo",
 				linehl = "",
 				numhl = "",
 			})
 			vim.fn.sign_define("DapLogPoint", {
 				text = "◆",
-				texthl = "DapLogPoint",
+				texthl = "DiagnosticInfo",
 				linehl = "",
 				numhl = "",
 			})
 			vim.fn.sign_define("DapStopped", {
 				text = "▶",
-				texthl = "DapStopped",
+				texthl = "DiagnosticWarn",
 				linehl = "DapStoppedLine",
-				numhl = "",
+				numhl = "DapStoppedLine",
 			})
 			vim.fn.sign_define("DapBreakpointRejected", {
 				text = "○",
-				texthl = "DapBreakpointRejected",
+				texthl = "DiagnosticError",
 				linehl = "",
 				numhl = "",
 			})
@@ -49,29 +49,69 @@ return {
 			-- Setup nvim-dap-ui
 			local dapui = require("dapui")
 			dapui.setup({
-				controls = {
-					element = "repl",
-					enabled = true,
+				icons = {
+					expanded = "󰇂",
+					collapsed = "󰇀",
+					current_frame = "󰇀",
 				},
+				mappings = {
+					expand = { "<CR>", "<2-LeftMouse>" },
+					open = "o",
+					remove = "d",
+					edit = "e",
+					repl = "r",
+					toggle = "t",
+				},
+				element_mappings = {},
+				expand_lines = true,
+				force_buffers = true,
 				layouts = {
 					{
 						elements = {
-							{ id = "scopes", size = 0.25 },
+							{ id = "scopes",      size = 0.25 },
 							{ id = "breakpoints", size = 0.25 },
-							{ id = "stacks", size = 0.25 },
-							{ id = "watches", size = 0.25 },
+							{ id = "stacks",      size = 0.25 },
+							{ id = "watches",     size = 0.25 },
 						},
 						position = "left",
 						size = 40,
 					},
 					{
 						elements = {
-							{ id = "repl", size = 0.5 },
+							{ id = "repl",    size = 0.5 },
 							{ id = "console", size = 0.5 }, -- CRITICAL: Shows simulator logs
 						},
 						position = "bottom",
 						size = 10,
 					},
+				},
+				floating = {
+					max_height = nil,
+					max_width = nil,
+					border = "single",
+					mappings = {
+						close = { "q", "<Esc>" },
+					},
+				},
+				controls = {
+					enabled = true,
+					element = "repl",
+					icons = {
+						pause = "⏸",
+						play = "▶",
+						step_into = "⬇",
+						step_over = "⤵",
+						step_out = "⬆",
+						step_back = "⬅",
+						run_last = "↻",
+						terminate = "⏹",
+						disconnect = "⏏",
+					},
+				},
+				render = {
+					max_type_length = nil,
+					max_value_lines = 100,
+					indent = 1,
 				},
 			})
 
@@ -96,11 +136,11 @@ return {
 		keys = {
 			-- Debug lifecycle
 			{
-				"<leader>xd",
+				"<leader>xdd",
 				function()
 					require("xcodebuild.integrations.dap").build_and_debug()
 				end,
-				desc = "Build & Debug",
+				desc = "Build & Debug (,xdd)",
 			},
 			{
 				"<leader>xD",
@@ -150,25 +190,25 @@ return {
 
 			-- Breakpoints
 			{
-				"<leader>xdb",
+				"<leader>bb",
 				function()
 					require("dap").toggle_breakpoint()
 				end,
-				desc = "Toggle Breakpoint",
+				desc = "Toggle Breakpoint (,bb)",
 			},
 			{
-				"<leader>xdB",
+				"<leader>bc",
 				function()
 					require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: "))
 				end,
-				desc = "Conditional Breakpoint",
+				desc = "Conditional Breakpoint (,bc)",
 			},
 			{
-				"<leader>xdl",
+				"<leader>bl",
 				function()
 					require("dap").set_breakpoint(nil, nil, vim.fn.input("Log message: "))
 				end,
-				desc = "Log Point",
+				desc = "Log Point (,bl)",
 			},
 
 			-- UI

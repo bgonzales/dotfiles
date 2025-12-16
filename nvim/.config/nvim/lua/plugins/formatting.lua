@@ -8,7 +8,7 @@ return {
 				swift = { "swiftformat" },
 				lua = { "stylua" },
 				python = { "ruff_format", "ruff_organize_imports" },
-				go = { "gofmt", "goimports" },
+				-- go = { "gofmt", "goimports" }, -- Requires Go installation
 				rust = { "rustfmt" },
 				c = { "clang-format" },
 				cpp = { "clang-format" },

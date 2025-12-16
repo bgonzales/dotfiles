@@ -7,16 +7,16 @@ return {
 			library = {
 				-- See the configuration section for more details
 				-- Load luvit types when the `vim.uv` word is found
-				{ path = "${3rd}/luv/library", words = { "vim%.uv" } }
-			}
-		}
+				{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
+			},
+		},
 	},
 	{
-		'saghen/blink.cmp',
-		dependencies = { 'rafamadriz/friendly-snippets' },
+		"saghen/blink.cmp",
+		dependencies = { "rafamadriz/friendly-snippets" },
 
 		-- use a release tag to download pre-built binaries
-		version = '1.*',
+		version = "1.*",
 		opts = {
 			-- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
 			-- 'super-tab' for mappings similar to vscode (tab to accept)
@@ -30,47 +30,47 @@ return {
 			-- C-k: Toggle signature help (if signature.enabled = true)
 			--
 			-- See :h blink-cmp-config-keymap for defining your own keymap
-			keymap = { preset = 'enter' },
+			keymap = { preset = "enter" },
 
 			completion = { documentation = { auto_show = true } },
 
 			appearance = {
 				-- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
 				-- Adjusts spacing to ensure icons are aligned
-				nerd_font_variant = 'mono'
+				nerd_font_variant = "mono",
 			},
 
 			signature = { enabled = true },
 		},
 	},
 	{
-		"WillPower3309/mason-tool-installer.nvim",
+		"WhoIsSethDaniel/mason-tool-installer.nvim",
 		dependencies = {
 			{ "mason-org/mason.nvim", opts = {} },
 		},
 		opts = {
 			ensure_installed = {
 				-- Formatters
-				"prettier",      -- JS/TS/HTML/CSS/JSON/Markdown
-				"stylua",        -- Lua
-				"swiftformat",   -- Swift
-				"ruff",          -- Python (formatter + linter)
-				"goimports",     -- Go imports
-				"clang-format",  -- C/C++
-				"latexindent",   -- LaTeX
+				"prettier", -- JS/TS/HTML/CSS/JSON/Markdown
+				"stylua", -- Lua
+				-- swiftformat NOT in Mason - install via: brew install swiftformat
+				"ruff", -- Python (formatter + linter)
+				-- goimports NOT in Mason - requires Go installation
+				"clang-format", -- C/C++
+				"latexindent", -- LaTeX
 				-- Linters
-				"swiftlint",     -- Swift
-				"eslint_d",      -- JS/TS (faster than eslint)
-				"selene",        -- Lua
-				"markdownlint",  -- Markdown
-				"shellcheck",    -- Shell scripts
-				"hadolint",      -- Dockerfile
-				"golangci-lint", -- Go
-				"stylelint",     -- CSS/SCSS
-				"yamllint",      -- YAML
-				"clang-tidy",    -- C/C++
-				"cppcheck",      -- C/C++
-				"chktex",        -- LaTeX
+				-- swiftlint NOT in Mason - install via: brew install swiftlint
+				-- eslint_d: Not needed, eslint LSP provides diagnostics for JS/TS (matches LazyVim)
+				-- selene: Not needed, lua_ls provides diagnostics for Lua
+				"markdownlint", -- Markdown
+				"shellcheck", -- Shell scripts
+				"hadolint", -- Dockerfile
+				-- golangci-lint NOT in Mason - requires Go installation
+				"stylelint", -- CSS/SCSS
+				"yamllint", -- YAML
+				-- clang-tidy NOT in Mason - integrated into clangd LSP
+				-- cppcheck NOT in Mason - install via: brew install cppcheck
+				-- chktex NOT in Mason - install via: brew install chktex (or use texlab LSP)
 			},
 			auto_update = false,
 			run_on_start = true,
@@ -83,7 +83,7 @@ return {
 			"neovim/nvim-lspconfig",
 		},
 		opts = function()
-			local capabilities = require('blink.cmp').get_lsp_capabilities()
+			local capabilities = require("blink.cmp").get_lsp_capabilities()
 			return {
 				ensure_installed = {
 					"lua_ls",
@@ -97,22 +97,22 @@ return {
 					"jsonls",
 					"pyright",
 					"ruff",
-					"gopls",
+					-- gopls requires Go installation
 					"rust_analyzer",
 					"marksman",
 					"svelte",
 					"docker_compose_language_service",
-					"dockerls"
+					"dockerls",
 				},
 				automatic_installation = true,
 				handlers = {
 					function(server_name)
-						require('lspconfig')[server_name].setup {
+						require("lspconfig")[server_name].setup({
 							capabilities = capabilities,
-						}
+						})
 					end,
 				},
 			}
-		end
-	}
+		end,
+	},
 }
