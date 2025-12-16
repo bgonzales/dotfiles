@@ -39,6 +39,44 @@ return {
 				-- Device management
 				focus_simulator_on_app_launch = true,
 			})
+
+			-- Custom command to generate buildServer.json from xcodebuild config
+			vim.api.nvim_create_user_command("XcodebuildGenerateBuildServer", function()
+				local config = require("xcodebuild.project.config").settings
+
+				if not config.scheme then
+					vim.notify("No scheme configured. Run :XcodebuildSetup first", vim.log.levels.ERROR)
+					return
+				end
+
+				local project_file = config.projectFile or config.workspace
+				if not project_file then
+					vim.notify("No project/workspace found", vim.log.levels.ERROR)
+					return
+				end
+
+				local is_workspace = project_file:match("%.xcworkspace$")
+				local flag = is_workspace and "-workspace" or "-project"
+
+				local cmd = string.format(
+					"xcode-build-server config %s %s -scheme %s",
+					flag,
+					vim.fn.shellescape(project_file),
+					vim.fn.shellescape(config.scheme)
+				)
+
+				vim.notify("Generating buildServer.json...", vim.log.levels.INFO)
+				vim.fn.jobstart(cmd, {
+					on_exit = function(_, exit_code)
+						if exit_code == 0 then
+							vim.notify("✓ buildServer.json generated successfully", vim.log.levels.INFO)
+							vim.cmd("LspRestart sourcekit")
+						else
+							vim.notify("✗ Failed to generate buildServer.json", vim.log.levels.ERROR)
+						end
+					end
+				})
+			end, { desc = "Generate buildServer.json from xcodebuild config" })
 		end,
 		keys = {
 			-- Editor actions
@@ -47,6 +85,7 @@ return {
 			{ "<leader>xr", "<CMD>XcodebuildBuildRun<CR>", desc = "Build and run project" },
 			{ "<leader>xs", "<CMD>XcodebuildBuildCancel<CR>", desc = "Stop running action" },
 			{ "<leader>xl", "<CMD>XcodebuildToggleLogs<CR>", desc = "Toggle logs" },
+			{ "<leader>xg", "<CMD>XcodebuildGenerateBuildServer<CR>", desc = "Generate buildServer.json" },
 
 			-- Testing
 			{ "<leader>xt", "<CMD>XcodebuildTest<CR>", desc = "Run all tests" },
