@@ -23,17 +23,24 @@ return {
 		local t = { objc = 'objective-c', objcpp = 'objective-cpp' }
 		return t[ftype] or ftype
 	end,
-	capabilities = {
-		workspace = {
+	capabilities = function()
+		-- Get capabilities from blink.cmp if available, otherwise use defaults
+		local ok, blink = pcall(require, 'blink.cmp')
+		local capabilities = ok and blink.get_lsp_capabilities() or vim.lsp.protocol.make_client_capabilities()
+
+		-- Merge with sourcekit-specific capabilities
+		capabilities.workspace = vim.tbl_deep_extend('force', capabilities.workspace or {}, {
 			didChangeWatchedFiles = {
 				dynamicRegistration = true,
 			},
-		},
-		textDocument = {
+		})
+		capabilities.textDocument = vim.tbl_deep_extend('force', capabilities.textDocument or {}, {
 			diagnostic = {
 				dynamicRegistration = true,
 				relatedDocumentSupport = true,
 			},
-		},
-	},
+		})
+
+		return capabilities
+	end,
 }

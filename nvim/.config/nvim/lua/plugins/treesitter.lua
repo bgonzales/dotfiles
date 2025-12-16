@@ -17,6 +17,7 @@ return {
 		ensure_installed = {
 			'bash', 'c', 'cpp',
 			'css', 'javascript', 'html', 'typescript', 'tsx',
+			'svelte',
 			'swift', 'python', 'kotlin', 'latex',
 			'lua', 'luadoc', 'luap',
 			'markdown', 'markdown_inline', 'json',

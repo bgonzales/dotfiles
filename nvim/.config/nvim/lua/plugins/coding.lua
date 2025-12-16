@@ -44,9 +44,42 @@ return {
 		},
 	},
 	{
-		"mason-org/mason-lspconfig.nvim",
+		"WillPower3309/mason-tool-installer.nvim",
 		dependencies = {
 			{ "mason-org/mason.nvim", opts = {} },
+		},
+		opts = {
+			ensure_installed = {
+				-- Formatters
+				"prettier",      -- JS/TS/HTML/CSS/JSON/Markdown
+				"stylua",        -- Lua
+				"swiftformat",   -- Swift
+				"ruff",          -- Python (formatter + linter)
+				"goimports",     -- Go imports
+				"clang-format",  -- C/C++
+				"latexindent",   -- LaTeX
+				-- Linters
+				"swiftlint",     -- Swift
+				"eslint_d",      -- JS/TS (faster than eslint)
+				"selene",        -- Lua
+				"markdownlint",  -- Markdown
+				"shellcheck",    -- Shell scripts
+				"hadolint",      -- Dockerfile
+				"golangci-lint", -- Go
+				"stylelint",     -- CSS/SCSS
+				"yamllint",      -- YAML
+				"clang-tidy",    -- C/C++
+				"cppcheck",      -- C/C++
+				"chktex",        -- LaTeX
+			},
+			auto_update = false,
+			run_on_start = true,
+		},
+	},
+	{
+		"mason-org/mason-lspconfig.nvim",
+		dependencies = {
+			"mason-org/mason.nvim",
 			"neovim/nvim-lspconfig",
 		},
 		opts = function()
@@ -62,6 +95,12 @@ return {
 					"ts_ls",
 					"eslint",
 					"jsonls",
+					"pyright",
+					"ruff",
+					"gopls",
+					"rust_analyzer",
+					"marksman",
+					"svelte",
 					"docker_compose_language_service",
 					"dockerls"
 				},

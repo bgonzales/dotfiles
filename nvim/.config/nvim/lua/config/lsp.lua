@@ -12,10 +12,15 @@ vim.diagnostic.config({
 vim.api.nvim_create_autocmd('LspAttach', {
 	group = vim.api.nvim_create_augroup('UserLspConfig', {}),
 	callback = function(ev)
-		vim.keymap.set('n', '<leader>ff', vim.lsp.buf.format, { buffer = ev.buf, desc = '[F]ormat [F]ile' })
+		-- Use conform.nvim for formatting (consistent with ,xcf keybinding)
+		vim.keymap.set('n', '<leader>ff', function()
+			require('conform').format({ async = true, lsp_format = "fallback" })
+		end, { buffer = ev.buf, desc = '[F]ormat [F]ile' })
 	end
 })
 
+-- Enable SourceKit-LSP for Swift (macOS only)
+-- Configuration is defined in lsp/sourcekit.lua (modern neovim 0.10+ pattern)
 if vim.uv.os_uname().sysname == "Darwin" then
 	vim.lsp.enable('sourcekit')
 end
