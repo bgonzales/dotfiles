@@ -4,6 +4,36 @@
 vim.g.mapleader = ','
 vim.g.maplocalleader = ','
 
+-- Exclude build directories from LSP file watching
+-- Prevents errors with temporary files (e.g., Swift .build/*.pcm.lock)
+local watch_type = require("vim._watch").FileChangeType
+local original_watch = vim.lsp.util._watchfiles
+
+if original_watch then
+	vim.lsp.util._watchfiles = function(path, opts, callback)
+		-- Patterns to ignore
+		local ignore_patterns = {
+			"%.build/",      -- Swift
+			"/build/",       -- CMake, Gradle
+			"/target/",      -- Rust/Cargo
+			"node_modules/", -- Node
+			"__pycache__/",  -- Python
+			"%.pcm%.lock$",  -- Swift module cache locks
+		}
+
+		local wrapped_callback = function(filepath, change_type)
+			for _, pattern in ipairs(ignore_patterns) do
+				if filepath:match(pattern) then
+					return
+				end
+			end
+			callback(filepath, change_type)
+		end
+
+		return original_watch(path, opts, wrapped_callback)
+	end
+end
+
 -- Enable line numbers and relative position
 vim.opt.number = true
 vim.opt.relativenumber = true

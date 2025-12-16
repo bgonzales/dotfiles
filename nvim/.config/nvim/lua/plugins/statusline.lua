@@ -34,6 +34,7 @@ return {
 					{ "filename", path = 1, symbols = { modified = icons.system.file, readonly = "", unnamed = "" } },
 				},
 				lualine_x = {
+					require("codemate.statusline").lualine(),
 					{ require("lazy.status").updates, cond = require("lazy.status").has_updates, color = fg("Special") },
 					{
 						"diff",
