@@ -3,6 +3,7 @@ return {
 		"folke/trouble.nvim",
 		cmd = "Trouble",
 		opts = {
+			auto_preview = false,  -- Disable automatic preview, only open on Enter
 			modes = {
 				diagnostics = {
 					mode = "diagnostics",
@@ -15,6 +16,22 @@ return {
 				},
 			},
 		},
+		config = function(_, opts)
+			require("trouble").setup(opts)
+
+			vim.api.nvim_create_autocmd("ColorScheme", {
+				group = vim.api.nvim_create_augroup("TroubleCustomColors", { clear = true }),
+				callback = function()
+					-- Make Trouble window background match normal buffer background
+					vim.api.nvim_set_hl(0, "TroubleNormal", { link = "Normal" })
+					vim.api.nvim_set_hl(0, "TroubleNormalNC", { link = "Normal" })
+				end,
+			})
+
+			-- Apply immediately for current colorscheme
+			vim.api.nvim_set_hl(0, "TroubleNormal", { link = "Normal" })
+			vim.api.nvim_set_hl(0, "TroubleNormalNC", { link = "Normal" })
+		end,
 		keys = {
 			{
 				"<leader>xx",
