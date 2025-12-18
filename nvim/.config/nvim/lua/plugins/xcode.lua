@@ -59,6 +59,9 @@ return {
 					-- Open Trouble if build failed with errors
 					if not data.success and not data.cancelled and #data.errors > 0 then
 						vim.cmd("Trouble qflist open")
+						vim.cmd("echo 'Build Failed'")
+					else
+						vim.cmd("echo 'Build Succeeded'")
 					end
 				end,
 			})
