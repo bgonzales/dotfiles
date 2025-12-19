@@ -3,33 +3,50 @@
 ## Requirements
 
 - Requirements for Telescope and language servers: `brew install fzf ripgrep fd node luarocks`
-- Treesitter-cli: `npm install -g tree-sitter-cli@0.25.9` (version 0.25.x required, see note below)
+- Treesitter-cli: `npm install -g tree-sitter-cli` (latest version, 0.26.x+)
 - Requirements for Xcode plugin: `brew install xcode-build-server xcbeautify swiftformat swiftlint` and `gem install xcodeproj --user-install` (make sure to include .gems in PATH)
 
 `xcode-build-server` is optional
 
-### Tree-sitter Version Note
+### Tree-sitter Configuration
 
-This config uses `branch = "master"` for nvim-treesitter and nvim-treesitter-textobjects because:
-- The `main` branch removed `nvim-treesitter.configs` module (breaking change)
-- tree-sitter-cli 0.26.x removed the `--no-bindings` flag
-- tree-sitter-cli 0.24.x doesn't support ABI version 15 (needed for swift parser)
+This config uses `branch = "main"` for nvim-treesitter and nvim-treesitter-textobjects with the new API:
+- `require("nvim-treesitter").setup(opts)` (new API)
+- Textobjects configured as a separate plugin
 
-**Required version: tree-sitter-cli 0.25.x** (tested with 0.25.9)
+**Required version: tree-sitter-cli 0.26.x+** (tested with 0.26.3)
 
 ## Check Health
 
 - Run `:checkhealth`
-- If throwing error related to tree-sitter CLI not found: `npm install -g tree-sitter-cli@0.25.9`
+- If throwing error related to tree-sitter CLI not found: `npm install -g tree-sitter-cli`
 
 ## Installation
 
-Clear configuration if needed
+### Clean Install
+
+Clear all Neovim data and cache:
 
 ```bash
-rm -rf ~/.cache/nvim ~/.local/share/nvim
-rm lazy-lock.json
+rm -rf ~/.local/share/nvim ~/.local/state/nvim ~/.cache/nvim ~/.config/nvim/lazy-lock.json && nvim
 ```
+
+### Updating from Old Config (master branch + tree-sitter 0.25.x)
+
+If you have a machine running the old configuration (using `branch = "master"` and tree-sitter 0.25.x), follow these steps:
+
+Update tree-sitter-cli:
+```bash
+npm uninstall -g tree-sitter-cli
+npm install -g tree-sitter-cli
+```
+
+Clean install Neovim plugins:
+```bash
+rm -rf ~/.local/share/nvim ~/.local/state/nvim ~/.cache/nvim ~/.config/nvim/lazy-lock.json && nvim
+```
+
+No need to reinstall Neovim itself - just update tree-sitter-cli and clear the plugin data.
 
 ## Language Support
 
@@ -79,8 +96,3 @@ Complete development environment with LSP, formatting, linting, and completion f
 - `,cl` - Trigger linting (all languages)
 - `,xd` - Build & debug (Swift/Xcode)
 - `,xt` - Run tests (Swift/Xcode)
-
-## TODO
-
-- [ ] Update nvim-treesitter config to use `main` branch and new API (`require("nvim-treesitter").setup()`) once nvim-treesitter-textobjects is updated for compatibility
-- [ ] Update tree-sitter-cli to latest version (0.26.x+) once nvim-treesitter supports it
