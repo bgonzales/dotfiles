@@ -2,17 +2,25 @@
 
 ## Requirements
 
-- Requirements for Telescope and language servers: `brew install fzf ripgrep fd node`
-- Treesitter-cli: `npm install -g tree-sitter-cli`
+- Requirements for Telescope and language servers: `brew install fzf ripgrep fd node luarocks`
+- Treesitter-cli: `npm install -g tree-sitter-cli@0.25.9` (version 0.25.x required, see note below)
 - Requirements for Xcode plugin: `brew install xcode-build-server xcbeautify swiftformat swiftlint` and `gem install xcodeproj --user-install` (make sure to include .gems in PATH)
 
 `xcode-build-server` is optional
 
+### Tree-sitter Version Note
+
+This config uses `branch = "master"` for nvim-treesitter and nvim-treesitter-textobjects because:
+- The `main` branch removed `nvim-treesitter.configs` module (breaking change)
+- tree-sitter-cli 0.26.x removed the `--no-bindings` flag
+- tree-sitter-cli 0.24.x doesn't support ABI version 15 (needed for swift parser)
+
+**Required version: tree-sitter-cli 0.25.x** (tested with 0.25.9)
+
 ## Check Health
 
 - Run `:checkhealth`
-- If throwing error related to tree-sitter CLI not found: `npm install tree-sitter-cli`
-- If getting error about luarocks: `brew install luarocks` 
+- If throwing error related to tree-sitter CLI not found: `npm install -g tree-sitter-cli@0.25.9`
 
 ## Installation
 
@@ -71,3 +79,8 @@ Complete development environment with LSP, formatting, linting, and completion f
 - `,cl` - Trigger linting (all languages)
 - `,xd` - Build & debug (Swift/Xcode)
 - `,xt` - Run tests (Swift/Xcode)
+
+## TODO
+
+- [ ] Update nvim-treesitter config to use `main` branch and new API (`require("nvim-treesitter").setup()`) once nvim-treesitter-textobjects is updated for compatibility
+- [ ] Update tree-sitter-cli to latest version (0.26.x+) once nvim-treesitter supports it
