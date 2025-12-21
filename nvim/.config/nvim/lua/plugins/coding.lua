@@ -32,15 +32,35 @@ return {
 			-- See :h blink-cmp-config-keymap for defining your own keymap
 			keymap = { preset = "enter" },
 
-			completion = { documentation = { auto_show = true } },
-
-			appearance = {
-				-- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
-				-- Adjusts spacing to ensure icons are aligned
-				nerd_font_variant = "mono",
+			-- Completion menu appearance (optimized for speed)
+			completion = {
+				menu = {
+					border = "rounded",
+					scrollbar = true,
+					auto_show = true, -- Show completion menu automatically
+					-- Using default draw for maximum performance
+				},
+				documentation = {
+					auto_show = false, -- Manual show for best performance (use C-space when needed)
+					window = {
+						border = "rounded",
+					},
+				},
 			},
 
-			signature = { enabled = true },
+
+			-- Appearance configuration (using defaults for speed)
+			appearance = {
+				nerd_font_variant = "mono",
+				use_nvim_cmp_as_default = true,
+				-- Using default kind_icons for better performance
+			},
+
+			-- Signature help
+			signature = {
+				enabled = true,
+				window = { border = "rounded" },
+			},
 		},
 	},
 	{

@@ -29,18 +29,33 @@ return {
 		},
 		opts = {
 			defaults = {
+				path_display = { "filename_first" },  -- Show filename first, then path
 				sorting_strategy = "ascending",
 				layout_config = {
 					prompt_position = "top",
 					horizontal = {
-						preview_width = 0.5,
+						preview_width = 0.6,  -- Increase preview (right column) size
+						width = 0.8,  -- Use 80% of screen width
 					},
 					vertical = {
 						preview_height = 0.5,
 					},
 				},
-				extensions = {
-					file_browser = { },
+			},
+			pickers = {
+				live_grep = {
+					path_display = { "tail" },
+				},
+				git_status = {
+					path_display = { "filename_first" },
+				},
+				diagnostics = {
+					path_display = { "filename_first" },
+				},
+			},
+			extensions = {
+				file_browser = {
+					path_display = { "filename_first" },
 				},
 			},
 		},

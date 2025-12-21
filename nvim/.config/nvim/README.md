@@ -2,26 +2,51 @@
 
 ## Requirements
 
-- Requirements for Telescope and language servers: `brew install fzf ripgrep fd node`
-- Treesitter-cli: `npm install -g tree-sitter-cli`
+- Requirements for Telescope and language servers: `brew install fzf ripgrep fd node luarocks`
+- Treesitter-cli: `npm install -g tree-sitter-cli` (latest version, 0.26.x+)
 - Requirements for Xcode plugin: `brew install xcode-build-server xcbeautify swiftformat swiftlint` and `gem install xcodeproj --user-install` (make sure to include .gems in PATH)
 
 `xcode-build-server` is optional
 
+### Tree-sitter Configuration
+
+This config uses `branch = "main"` for nvim-treesitter and nvim-treesitter-textobjects with the new API:
+- `require("nvim-treesitter").setup(opts)` (new API)
+- Textobjects configured as a separate plugin
+
+**Required version: tree-sitter-cli 0.26.x+** (tested with 0.26.3)
+
 ## Check Health
 
 - Run `:checkhealth`
-- If throwing error related to tree-sitter CLI not found: `npm install tree-sitter-cli`
-- If getting error about luarocks: `brew install luarocks` 
+- If throwing error related to tree-sitter CLI not found: `npm install -g tree-sitter-cli`
 
 ## Installation
 
-Clear configuration if needed
+### Clean Install
+
+Clear all Neovim data and cache:
 
 ```bash
-rm -rf ~/.cache/nvim ~/.local/share/nvim
-rm lazy-lock.json
+rm -rf ~/.local/share/nvim ~/.local/state/nvim ~/.cache/nvim ~/.config/nvim/lazy-lock.json && nvim
 ```
+
+### Updating from Old Config (master branch + tree-sitter 0.25.x)
+
+If you have a machine running the old configuration (using `branch = "master"` and tree-sitter 0.25.x), follow these steps:
+
+Update tree-sitter-cli:
+```bash
+npm uninstall -g tree-sitter-cli
+npm install -g tree-sitter-cli
+```
+
+Clean install Neovim plugins:
+```bash
+rm -rf ~/.local/share/nvim ~/.local/state/nvim ~/.cache/nvim ~/.config/nvim/lazy-lock.json && nvim
+```
+
+No need to reinstall Neovim itself - just update tree-sitter-cli and clear the plugin data.
 
 ## Language Support
 
