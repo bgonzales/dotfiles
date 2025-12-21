@@ -145,3 +145,25 @@ vim.api.nvim_create_autocmd({"BufNewFile", "BufRead", "TermOpen", "ColorScheme"}
 		vim.cmd("hi clear SpellLocal")
 	end,
 })
+
+-- Enable treesitter-based highlighting and indentation for all filetypes
+-- Required for nvim-treesitter main branch (new API)
+vim.api.nvim_create_autocmd("FileType", {
+	group = vim.api.nvim_create_augroup("TreesitterConfig", { clear = true }),
+	callback = function()
+		local buf = vim.api.nvim_get_current_buf()
+		local ft = vim.bo[buf].filetype
+
+		-- Enable treesitter highlighting
+		if pcall(vim.treesitter.start, buf) then
+			-- Disable traditional syntax highlighting when treesitter is active
+			vim.bo[buf].syntax = ""
+		end
+
+		-- Enable treesitter indentation (skip for certain filetypes)
+		local indent_disabled = { python = true }
+		if not indent_disabled[ft] and pcall(require, "nvim-treesitter") then
+			vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+		end
+	end,
+})

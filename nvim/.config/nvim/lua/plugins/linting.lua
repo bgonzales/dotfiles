@@ -23,22 +23,39 @@ return {
 				-- LaTeX: chktex not in Mason, texlab LSP provides diagnostics
 			}
 
+			-- Track linting state
+			vim.g.linting_enabled = true
+
 			-- Auto-lint on save and buffer enter
 			local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
 			vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
 				group = lint_augroup,
 				callback = function()
-					require("lint").try_lint()
+					if vim.g.linting_enabled then
+						lint.try_lint()
+					end
 				end,
 			})
 		end,
 		keys = {
 			{
-				"<leader>cl",
+				"<leader>ll",
 				function()
-					require("lint").try_lint()
+					local lint = require("lint")
+					vim.g.linting_enabled = not vim.g.linting_enabled
+					if vim.g.linting_enabled then
+						lint.try_lint()
+						vim.notify("Linting enabled", vim.log.levels.INFO)
+					else
+						-- Clear diagnostics for all configured linters
+						local linters = lint.linters_by_ft[vim.bo.filetype] or {}
+						for _, linter in ipairs(linters) do
+							pcall(vim.diagnostic.reset, lint.get_namespace(linter))
+						end
+						vim.notify("Linting disabled", vim.log.levels.INFO)
+					end
 				end,
-				desc = "Trigger linting",
+				desc = "Toggle [L]inting",
 			},
 		},
 	},
