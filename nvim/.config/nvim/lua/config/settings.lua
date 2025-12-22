@@ -4,6 +4,36 @@
 vim.g.mapleader = ','
 vim.g.maplocalleader = ','
 
+-- Exclude build directories from LSP file watching
+-- Prevents errors with temporary files (e.g., Swift .build/*.pcm.lock)
+local watch_type = require("vim._watch").FileChangeType
+local original_watch = vim.lsp.util._watchfiles
+
+if original_watch then
+	vim.lsp.util._watchfiles = function(path, opts, callback)
+		-- Patterns to ignore
+		local ignore_patterns = {
+			"%.build/",      -- Swift
+			"/build/",       -- CMake, Gradle
+			"/target/",      -- Rust/Cargo
+			"node_modules/", -- Node
+			"__pycache__/",  -- Python
+			"%.pcm%.lock$",  -- Swift module cache locks
+		}
+
+		local wrapped_callback = function(filepath, change_type)
+			for _, pattern in ipairs(ignore_patterns) do
+				if filepath:match(pattern) then
+					return
+				end
+			end
+			callback(filepath, change_type)
+		end
+
+		return original_watch(path, opts, wrapped_callback)
+	end
+end
+
 -- Enable line numbers and relative position
 vim.opt.number = true
 vim.opt.relativenumber = true
@@ -113,5 +143,27 @@ vim.api.nvim_create_autocmd({"BufNewFile", "BufRead", "TermOpen", "ColorScheme"}
 	callback = function()
 		vim.cmd("hi clear SpellBad")
 		vim.cmd("hi clear SpellLocal")
+	end,
+})
+
+-- Enable treesitter-based highlighting and indentation for all filetypes
+-- Required for nvim-treesitter main branch (new API)
+vim.api.nvim_create_autocmd("FileType", {
+	group = vim.api.nvim_create_augroup("TreesitterConfig", { clear = true }),
+	callback = function()
+		local buf = vim.api.nvim_get_current_buf()
+		local ft = vim.bo[buf].filetype
+
+		-- Enable treesitter highlighting
+		if pcall(vim.treesitter.start, buf) then
+			-- Disable traditional syntax highlighting when treesitter is active
+			vim.bo[buf].syntax = ""
+		end
+
+		-- Enable treesitter indentation (skip for certain filetypes)
+		local indent_disabled = { python = true }
+		if not indent_disabled[ft] and pcall(require, "nvim-treesitter") then
+			vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+		end
 	end,
 })
