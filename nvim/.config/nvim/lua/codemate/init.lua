@@ -11,7 +11,7 @@ local defaults = {
     history_current = "<leader>ch", -- current project history
     stop = "<leader>ck",            -- kill/stop
     rerun = "<leader>cl",           -- re-run last
-    toggle = "<leader>co",          -- toggle output
+    toggle = "<leader>cy",          -- toggle output
     menu = "<leader>cc",            -- quick actions menu
     dashboard = "<leader>cd",       -- project dashboard
     timeline = "<leader>cT",        -- build timeline
@@ -55,7 +55,7 @@ function M.setup(opts)
 
   vim.keymap.set("n", opts.keymaps.toggle, function()
     runner.toggle()
-  end, { desc = "[C]odemate toggle [O]utput" })
+  end, { desc = "[C]odemate toggle output [Y]" })
 
   vim.keymap.set("n", opts.keymaps.history, function()
     history.pick()
