@@ -30,6 +30,9 @@ vim.diagnostic.config({
 vim.api.nvim_create_autocmd('LspAttach', {
 	group = vim.api.nvim_create_augroup('UserLspConfig', {}),
 	callback = function(ev)
+		-- Go to definition (not a default in Neovim 0.11)
+		vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { buffer = ev.buf, desc = 'Go to Definition' })
+
 		-- Use conform.nvim for formatting (consistent with ,xcf keybinding)
 		vim.keymap.set('n', '<leader>ff', function()
 			require('conform').format({ async = true, lsp_format = "fallback" })

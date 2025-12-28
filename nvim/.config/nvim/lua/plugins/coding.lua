@@ -126,9 +126,70 @@ return {
 				},
 				automatic_installation = true,
 				handlers = {
+					-- Default handler for all servers
 					function(server_name)
 						require("lspconfig")[server_name].setup({
 							capabilities = capabilities,
+						})
+					end,
+					-- TypeScript: Better monorepo support
+					["ts_ls"] = function()
+						local lspconfig = require("lspconfig")
+						lspconfig.ts_ls.setup({
+							capabilities = capabilities,
+							root_dir = lspconfig.util.root_pattern(
+								"tsconfig.json",
+								"package.json",
+								"jsconfig.json",
+								".git"
+							),
+							settings = {
+								typescript = {
+									inlayHints = {
+										includeInlayParameterNameHints = "all",
+										includeInlayFunctionParameterTypeHints = true,
+										includeInlayVariableTypeHints = true,
+									},
+								},
+								javascript = {
+									inlayHints = {
+										includeInlayParameterNameHints = "all",
+										includeInlayFunctionParameterTypeHints = true,
+										includeInlayVariableTypeHints = true,
+									},
+								},
+							},
+						})
+					end,
+					-- ESLint: Monorepo + flat config support
+					["eslint"] = function()
+						local lspconfig = require("lspconfig")
+						lspconfig.eslint.setup({
+							capabilities = capabilities,
+							root_dir = lspconfig.util.root_pattern(
+								"eslint.config.js",
+								"eslint.config.mjs",
+								".eslintrc.js",
+								".eslintrc.json",
+								"package.json"
+							),
+							settings = {
+								workingDirectories = { mode = "auto" },
+							},
+						})
+					end,
+					-- Tailwind: Find config in monorepo
+					["tailwindcss"] = function()
+						local lspconfig = require("lspconfig")
+						lspconfig.tailwindcss.setup({
+							capabilities = capabilities,
+							root_dir = lspconfig.util.root_pattern(
+								"tailwind.config.js",
+								"tailwind.config.ts",
+								"postcss.config.js",
+								"postcss.config.mjs",
+								"package.json"
+							),
 						})
 					end,
 				},
